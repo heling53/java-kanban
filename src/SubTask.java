@@ -1,5 +1,6 @@
-public class SubTask extends Task {
-    private int epicID;
+public class SubTask extends AbstractTask {
+    private final int epicID;
+
     public SubTask(String name, String description, int epicID) {
         super(name, description);
         this.epicID = epicID;
@@ -9,9 +10,9 @@ public class SubTask extends Task {
         return epicID;
     }
 
-    public void setEpicID(int epicID) {
-        this.epicID = epicID;
-    }
+//    public void setEpicID(int epicID) {
+//        this.epicID = epicID;
+//    }
 
     @Override
     public String toString() {

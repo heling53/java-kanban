@@ -25,22 +25,25 @@ public class Main {
 
         subTask3.setType(Status.DONE);
         manager.updateSubtask(subTask3);
-        manager.deleteEpicById(epic2.getId());
+        System.out.println(
+        );
+        System.out.println();
+        manager.getSubtasksByEpicId(epic.getId());
+        System.out.println(manager.getSubtasksByEpicId(epic.getId()));
 
-        manager.deleteSubtaskById(subTask1.getId());
 
 
-        System.out.println(task1);
-        System.out.println(task2);
-
-        System.out.println(epic);
-
-        System.out.println(subTask1);
-        System.out.println(subTask3);
-        System.out.println(subTask4);
-        System.out.println(subTask5);
-        System.out.println(epic2);
-        System.out.println(manager.getAllSubtasks());
+//        System.out.println(task1);
+//        System.out.println(task2);
+//
+//        System.out.println(epic);
+//
+//        System.out.println(subTask1);
+//        System.out.println(subTask3);
+//        System.out.println(subTask4);
+//        System.out.println(subTask5);
+//        System.out.println(epic2);
+//        System.out.println(manager.getAllSubtasks());
 
 
 
