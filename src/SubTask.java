@@ -10,9 +10,6 @@ public class SubTask extends AbstractTask {
         return epicID;
     }
 
-//    public void setEpicID(int epicID) {
-//        this.epicID = epicID;
-//    }
 
     @Override
     public String toString() {
