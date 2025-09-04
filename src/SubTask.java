@@ -1,20 +1,20 @@
 public class SubTask extends AbstractTask {
-    private final int epicID;
+    private final int epicId;
 
     public SubTask(String name, String description, int epicID) {
         super(name, description);
-        this.epicID = epicID;
+        this.epicId = epicID;
     }
 
-    public int getEpicID() {
-        return epicID;
+    public int getEpicId() {
+        return epicId;
     }
 
 
     @Override
     public String toString() {
         return "SubTask{" +
-                "epicID=" + epicID +
+                "epicID=" + epicId +
                 ", name='" + name + '\'' +
                 ", description='" + description + '\'' +
                 ", id=" + id +

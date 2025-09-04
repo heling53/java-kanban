@@ -11,7 +11,7 @@ public class TaskManager {
 
 
     // МЕТОДЫ ДЛЯ TASK
-    public List<AbstractTask> getAllTasks() {
+    public List<Task> getAllTasks() {
         return new ArrayList<>(taskMap.values());
     }
 
@@ -19,7 +19,7 @@ public class TaskManager {
         taskMap.clear();
     }
 
-    public AbstractTask getTaskById(int id) {
+    public Task getTaskById(int id) {
         return taskMap.get(id);
     }
 
@@ -42,8 +42,6 @@ public class TaskManager {
     public void deleteTaskById(int id) {
         if (taskMap.containsKey(id)) {
             taskMap.remove(id);
-        } else {
-            throw new RuntimeException("Нет такой задачи!");
         }
 
     }
@@ -81,7 +79,7 @@ public class TaskManager {
         if (epicsMap.containsKey(epicIdForDelete)) {
             Epic epicForDelete = epicsMap.get(epicIdForDelete);
             epicsMap.remove(epicIdForDelete);
-            for (int subTaskIdForDelete : epicForDelete.getSubTasksID()) {
+            for (int subTaskIdForDelete : epicForDelete.getSubTasksId()) {
                 subTaskMap.remove(subTaskIdForDelete);
             }
         } else {
@@ -98,7 +96,9 @@ public class TaskManager {
     }
 
     public void deleteAllSubtasks() {
-
+        for (SubTask subTask : getAllSubtasks()) {
+            getEpicById(subTask.getEpicId()).clearAllSubTasksID();
+        }
         subTaskMap.clear();
     }
 
@@ -110,13 +110,13 @@ public class TaskManager {
         subTaskMap.put(nextId, subtask);
         subtask.setId(nextId);
         nextId++;
-        epicsMap.get(subtask.getEpicID()).addSubTasksID(subtask.getId());
+        epicsMap.get(subtask.getEpicId()).addSubTasksID(subtask.getId());
     }
 
     public void updateSubtask(SubTask subtask) {
         if (subTaskMap.containsKey(subtask.getId())) {
             subTaskMap.put(subtask.getId(), subtask);
-            int epicID = subtask.getEpicID();
+            int epicID = subtask.getEpicId();
             updateStatusEpic(epicsMap.get(epicID));
         } else {
             throw new RuntimeException("Нет такой задачи!");
@@ -126,7 +126,7 @@ public class TaskManager {
     public void deleteSubtaskById(int id) {
 
         if (subTaskMap.containsKey(id)) {
-            int epicId = subTaskMap.get(id).getEpicID();
+            int epicId = subTaskMap.get(id).getEpicId();
             Epic epic = getEpicById(epicId);
             epic.removeSubTasksID(id);
             subTaskMap.remove(id);
@@ -138,7 +138,7 @@ public class TaskManager {
 
     //ДОП МЕТОДЫ
     public List<SubTask> getSubtasksByEpicId(int epicId) {
-        List<Integer> subtaskIds = epicsMap.get(epicId).getSubTasksID();
+        List<Integer> subtaskIds = epicsMap.get(epicId).getSubTasksId();
         if (subtaskIds == null) {
             throw new RuntimeException("Нет такой задачи!");
         }
@@ -151,13 +151,13 @@ public class TaskManager {
     }
 
     private void updateStatusEpic(Epic epic) {
-        if (epic.getSubTasksID().isEmpty()) {
+        if (epic.getSubTasksId().isEmpty()) {
             epic.setType(Status.NEW);
             return;
         }
         boolean isDone = false;
         boolean isNew = false;
-        List<Integer> subtaskIds = epic.getSubTasksID();
+        List<Integer> subtaskIds = epic.getSubTasksId();
         for (Integer subtaskId : subtaskIds) {
             Status type = subTaskMap.get(subtaskId).getType();
             if (type == Status.DONE) {
