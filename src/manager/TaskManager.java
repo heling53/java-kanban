@@ -1,3 +1,10 @@
+package manager;
+
+import tasks.Epic;
+import tasks.SubTask;
+import tasks.Task;
+import tasks.enm.Status;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -98,6 +105,7 @@ public class TaskManager {
     public void deleteAllSubtasks() {
         for (SubTask subTask : getAllSubtasks()) {
             getEpicById(subTask.getEpicId()).clearAllSubTasksID();
+            updateStatusEpic((epicsMap.get(subTask.getEpicId())));
         }
         subTaskMap.clear();
     }
@@ -111,6 +119,7 @@ public class TaskManager {
         subtask.setId(nextId);
         nextId++;
         epicsMap.get(subtask.getEpicId()).addSubTasksID(subtask.getId());
+        updateStatusEpic(epicsMap.get(subtask.getEpicId()));
     }
 
     public void updateSubtask(SubTask subtask) {

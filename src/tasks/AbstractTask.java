@@ -1,7 +1,12 @@
+package tasks;
+
+import tasks.enm.Status;
+
 import java.util.Objects;
 
 
 public abstract class AbstractTask {
+
     protected String name;
     protected String description;
     protected int id;

@@ -1,3 +1,4 @@
+package tasks;
 
 public class Task extends AbstractTask {
 
@@ -8,7 +9,7 @@ public class Task extends AbstractTask {
 
     @Override
     public String toString() {
-        return "Task{" +
+        return "tasks.Task{" +
                 "name='" + name + '\'' +
                 ", description='" + description + '\'' +
                 ", id=" + id +

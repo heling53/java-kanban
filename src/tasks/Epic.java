@@ -1,3 +1,5 @@
+package tasks;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,7 +29,7 @@ public class Epic extends AbstractTask {
 
     @Override
     public String toString() {
-        return "Epic{" +
+        return "tasks.Epic{" +
                 "subTasksID=" + subTasksId +
                 ", name='" + name + '\'' +
                 ", description='" + description + '\'' +
