@@ -8,13 +8,14 @@ import tasks.enm.Status;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class TaskManager {
     private int nextId = 1;
 
-    private final HashMap<Integer, Task> taskMap = new HashMap<>();
-    private final HashMap<Integer, Epic> epicsMap = new HashMap<>();
-    private final HashMap<Integer, SubTask> subTaskMap = new HashMap<>();
+    private final Map<Integer, Task> taskMap = new HashMap<>();
+    private final Map<Integer, Epic> epicsMap = new HashMap<>();
+    private final Map<Integer, SubTask> subTaskMap = new HashMap<>();
 
 
     // МЕТОДЫ ДЛЯ TASK
