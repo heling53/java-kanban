@@ -1,5 +1,8 @@
 package test;
 
+import manager.HistoryManager;
+import manager.Managers;
+import manager.TaskManager;
 import manager.impl.InMemoryHistoryManager;
 import org.junit.jupiter.api.Test;
 import tasks.AbstractTask;
@@ -14,7 +17,7 @@ class InMemoryHistoryManagerTest {
 
     @Test
     void add() {
-        InMemoryHistoryManager historyManager = new InMemoryHistoryManager();
+        HistoryManager historyManager = Managers.getDefaultHistory();
         Task task = new Task("Test addNewTask", "Test addNewTask description");
         historyManager.add(task);
         final List<AbstractTask> history = historyManager.getHistory();
