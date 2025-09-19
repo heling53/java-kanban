@@ -1,5 +1,7 @@
 package test;
 
+import manager.Managers;
+import manager.TaskManager;
 import manager.impl.InMemoryTaskManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -14,14 +16,14 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 class InMemoryTaskManagerTest {
-    private InMemoryTaskManager taskManager;
+    private TaskManager taskManager;
     private Task task;
     private Epic epic;
     private SubTask subTask;
 
     @BeforeEach
     void setUp() {
-        taskManager = new InMemoryTaskManager();
+        taskManager = Managers.getDefault();
 
         task = new Task("Test Task", "Test Description");
         taskManager.createTask(task);
