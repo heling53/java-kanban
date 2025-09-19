@@ -1,199 +1,53 @@
 package manager;
 
+import tasks.AbstractTask;
 import tasks.Epic;
 import tasks.SubTask;
 import tasks.Task;
-import tasks.enm.Status;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-public class TaskManager {
-    private int nextId = 1;
-
-    private final Map<Integer, Task> taskMap = new HashMap<>();
-    private final Map<Integer, Epic> epicsMap = new HashMap<>();
-    private final Map<Integer, SubTask> subTaskMap = new HashMap<>();
-
-
+public interface TaskManager {
     // МЕТОДЫ ДЛЯ TASK
-    public List<Task> getAllTasks() {
-        return new ArrayList<>(taskMap.values());
-    }
+    List<Task> getAllTasks();
 
-    public void deleteAllTasks() {
-        taskMap.clear();
-    }
+    void deleteAllTasks();
 
-    public Task getTaskById(int id) {
-        return taskMap.get(id);
-    }
+    Task getTaskById(int id);
 
-    public void createTask(Task task) {
-        taskMap.put(nextId, task);
-        task.setId(nextId);
-        nextId++;
-    }
+    void createTask(Task task);
 
-    public void updateTask(Task task) {
-        if (taskMap.containsKey(task.getId())) {
-            taskMap.put(task.getId(), task);
-        } else {
-            throw new RuntimeException("Нет такой задачи!");
-        }
+    void updateTask(Task task);
 
-
-    }
-
-    public void deleteTaskById(int id) {
-        if (taskMap.containsKey(id)) {
-            taskMap.remove(id);
-        }
-
-    }
-
+    void deleteTaskById(int id);
 
     //МЕТОДЫ ДЛЯ EPIC
-    public List<Epic> getAllEpics() {
-        return new ArrayList<>(epicsMap.values());
-    }
+    List<Epic> getAllEpics();
 
-    public void deleteAllEpics() {
-        epicsMap.clear();
-        subTaskMap.clear();
-    }
+    void deleteAllEpics();
 
-    public Epic getEpicById(int id) {
-        return epicsMap.get(id);
-    }
+    Epic getEpicById(int id);
 
-    public void createEpic(Epic epic) {
-        epicsMap.put(nextId, epic);
-        epic.setId(nextId);
-        nextId++;
-    }
+    void createEpic(Epic epic);
 
-    public void updateEpic(Epic epic) {
-        if (epicsMap.containsKey(epic.getId())) {
-            epicsMap.put(epic.getId(), epic);
-        } else {
-            throw new RuntimeException("Нет такой задачи!");
-        }
-    }
+    void updateEpic(Epic epic);
 
-    public void deleteEpicById(int epicIdForDelete) {
-        if (epicsMap.containsKey(epicIdForDelete)) {
-            Epic epicForDelete = epicsMap.get(epicIdForDelete);
-            epicsMap.remove(epicIdForDelete);
-            for (int subTaskIdForDelete : epicForDelete.getSubTasksId()) {
-                subTaskMap.remove(subTaskIdForDelete);
-            }
-        } else {
-            throw new RuntimeException("Нет такой задачи!");
-        }
-    }
+    void deleteEpicById(int epicIdForDelete);
 
     //Методы ДЛЯ SUBTASKS
-    public List<SubTask> getAllSubtasks() {
-        if (subTaskMap.isEmpty()) {
-            throw new RuntimeException("Задач нет!");
-        }
-        return new ArrayList<>(subTaskMap.values());
-    }
+    List<SubTask> getAllSubtasks();
 
-    public void deleteAllSubtasks() {
-        for (SubTask subTask : getAllSubtasks()) {
-            getEpicById(subTask.getEpicId()).clearAllSubTasksID();
-            updateStatusEpic((epicsMap.get(subTask.getEpicId())));
-        }
-        subTaskMap.clear();
-    }
+    void deleteAllSubtasks();
 
-    public SubTask getSubtaskById(int id) {
-        return subTaskMap.get(id);
-    }
+    SubTask getSubtaskById(int id);
 
-    public void createSubtask(SubTask subtask) {
-        subTaskMap.put(nextId, subtask);
-        subtask.setId(nextId);
-        nextId++;
-        epicsMap.get(subtask.getEpicId()).addSubTasksID(subtask.getId());
-        updateStatusEpic(epicsMap.get(subtask.getEpicId()));
-    }
+    void createSubtask(SubTask subtask);
 
-    public void updateSubtask(SubTask subtask) {
-        if (subTaskMap.containsKey(subtask.getId())) {
-            subTaskMap.put(subtask.getId(), subtask);
-            int epicID = subtask.getEpicId();
-            updateStatusEpic(epicsMap.get(epicID));
-        } else {
-            throw new RuntimeException("Нет такой задачи!");
-        }
-    }
+    void updateSubtask(SubTask subtask);
 
-    public void deleteSubtaskById(int id) {
+    void deleteSubtaskById(int id);
 
-        if (subTaskMap.containsKey(id)) {
-            int epicId = subTaskMap.get(id).getEpicId();
-            Epic epic = getEpicById(epicId);
-            epic.removeSubTasksID(id);
-            subTaskMap.remove(id);
-            updateStatusEpic(epic);
-        } else {
-            throw new RuntimeException("Нет такой задачи!");
-        }
-    }
+    List<AbstractTask> getHistory();
 
-    //ДОП МЕТОДЫ
-    public List<SubTask> getSubtasksByEpicId(int epicId) {
-        List<Integer> subtaskIds = epicsMap.get(epicId).getSubTasksId();
-        if (subtaskIds == null) {
-            throw new RuntimeException("Нет такой задачи!");
-        }
-        List<SubTask> subtaskFind = new ArrayList<>();
-        for (Integer subtaskId : subtaskIds) {
-            subtaskFind.add(subTaskMap.get(subtaskId));
-        }
-        return subtaskFind;
-
-    }
-
-    private void updateStatusEpic(Epic epic) {
-        if (epic.getSubTasksId().isEmpty()) {
-            epic.setType(Status.NEW);
-            return;
-        }
-        boolean isDone = false;
-        boolean isNew = false;
-        List<Integer> subtaskIds = epic.getSubTasksId();
-        for (Integer subtaskId : subtaskIds) {
-            Status type = subTaskMap.get(subtaskId).getType();
-            if (type == Status.DONE) {
-                if (isNew) {
-                    epic.setType(Status.IN_PROGRESS);
-
-                    return;
-                } else {
-                    isDone = true;
-                }
-            } else if (type == Status.NEW) {
-                if (isDone) {
-                    epic.setType(Status.IN_PROGRESS);
-
-                    return;
-                } else {
-                    isNew = true;
-                }
-            }
-        }
-        if (isDone) {
-
-            epic.setType(Status.DONE);
-        } else if (isNew) {
-            epic.setType(Status.NEW);
-        }
-    }
 
 }
