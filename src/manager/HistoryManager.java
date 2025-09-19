@@ -9,6 +9,4 @@ public interface HistoryManager {
     boolean add(AbstractTask task);
 
     List<AbstractTask> getHistory();
-
-    //void addToHistory(AbstractTask task);
 }
