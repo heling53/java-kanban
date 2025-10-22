@@ -2,7 +2,6 @@ package test;
 
 import manager.Managers;
 import manager.TaskManager;
-import manager.impl.InMemoryTaskManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import tasks.AbstractTask;
@@ -86,13 +85,13 @@ class InMemoryTaskManagerTest {
     void UpdateTask() {
         Task updatedTask = new Task("Updated Task", "Updated Description");
         updatedTask.setId(task.getId());
-        updatedTask.setType(Status.DONE);
+        updatedTask.setStatus(Status.DONE);
         taskManager.updateTask(updatedTask);
 
         Task savedTask = taskManager.getTaskById(task.getId());
         assertEquals("Updated Task", savedTask.getName());
         assertEquals("Updated Description", savedTask.getDescription());
-        assertEquals(Status.DONE, savedTask.getType());
+        assertEquals(Status.DONE, savedTask.getStatus());
     }
 
     @Test
@@ -141,15 +140,15 @@ class InMemoryTaskManagerTest {
     @Test
     void UpdateSubtask() {
         SubTask updatedSubTask = new SubTask("Updated SubTask", "Updated Description", epic.getId());
-        updatedSubTask.setType(Status.DONE);
+        updatedSubTask.setStatus(Status.DONE);
         updatedSubTask.setId(subTask.getId());
         taskManager.updateSubtask(updatedSubTask);
 
         SubTask savedSubTask = taskManager.getSubtaskById(subTask.getId());
         assertEquals("Updated SubTask", savedSubTask.getName());
         assertEquals("Updated Description", savedSubTask.getDescription());
-        assertEquals(Status.DONE, savedSubTask.getType());
-        assertEquals(Status.DONE, epic.getType());
+        assertEquals(Status.DONE, savedSubTask.getStatus());
+        assertEquals(Status.DONE, epic.getStatus());
     }
 
     @Test
@@ -166,14 +165,14 @@ class InMemoryTaskManagerTest {
         taskManager.createSubtask(secondSubTask);
 
         SubTask doneSubTask = new SubTask("Done SubTask", "Description", epic.getId());
-        doneSubTask.setType(Status.DONE);
+        doneSubTask.setStatus(Status.DONE);
         doneSubTask.setId(subTask.getId());
         taskManager.updateSubtask(doneSubTask);
-        assertEquals(Status.IN_PROGRESS, epic.getType());
+        assertEquals(Status.IN_PROGRESS, epic.getStatus());
 
-        secondSubTask.setType(Status.DONE);
+        secondSubTask.setStatus(Status.DONE);
         taskManager.updateSubtask(secondSubTask);
-        assertEquals(Status.DONE, epic.getType());
+        assertEquals(Status.DONE, epic.getStatus());
 
     }
 
