@@ -15,12 +15,12 @@ import java.util.List;
 import java.util.Map;
 
 public class InMemoryTaskManager implements TaskManager {
-    private int nextId = 1;
+    protected int nextId = 1;
 
-    private final Map<Integer, Task> taskMap = new HashMap<>();
-    private final Map<Integer, Epic> epicsMap = new HashMap<>();
-    private final Map<Integer, SubTask> subTaskMap = new HashMap<>();
-    private final HistoryManager historyManager = Managers.getDefaultHistory();
+    protected final Map<Integer, Task> taskMap = new HashMap<>();
+    protected final Map<Integer, Epic> epicsMap = new HashMap<>();
+    protected final Map<Integer, SubTask> subTaskMap = new HashMap<>();
+    protected final HistoryManager historyManager = Managers.getDefaultHistory();
 
 
     // МЕТОДЫ ДЛЯ TASK
@@ -197,19 +197,19 @@ public class InMemoryTaskManager implements TaskManager {
 
     }
 
-    private void updateStatusEpic(Epic epic) {
+    protected void updateStatusEpic(Epic epic) {
         if (epic.getSubTasksId().isEmpty()) {
-            epic.setType(Status.NEW);
+            epic.setStatus(Status.NEW);
             return;
         }
         boolean isDone = false;
         boolean isNew = false;
         List<Integer> subtaskIds = epic.getSubTasksId();
         for (Integer subtaskId : subtaskIds) {
-            Status type = subTaskMap.get(subtaskId).getType();
+            Status type = subTaskMap.get(subtaskId).getStatus();
             if (type == Status.DONE) {
                 if (isNew) {
-                    epic.setType(Status.IN_PROGRESS);
+                    epic.setStatus(Status.IN_PROGRESS);
 
                     return;
                 } else {
@@ -217,7 +217,7 @@ public class InMemoryTaskManager implements TaskManager {
                 }
             } else if (type == Status.NEW) {
                 if (isDone) {
-                    epic.setType(Status.IN_PROGRESS);
+                    epic.setStatus(Status.IN_PROGRESS);
 
                     return;
                 } else {
@@ -227,9 +227,9 @@ public class InMemoryTaskManager implements TaskManager {
         }
         if (isDone) {
 
-            epic.setType(Status.DONE);
+            epic.setStatus(Status.DONE);
         } else if (isNew) {
-            epic.setType(Status.NEW);
+            epic.setStatus(Status.NEW);
         }
     }
 
