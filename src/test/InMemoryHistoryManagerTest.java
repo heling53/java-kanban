@@ -21,8 +21,6 @@ class InMemoryHistoryManagerTest {
     private Task task1, task2, task3;
 
 
-
-
     @BeforeEach
     void createTask() {
         task1 = new Task("Task 1", "Desc 1");

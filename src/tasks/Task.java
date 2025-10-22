@@ -3,7 +3,8 @@ package tasks;
 import tasks.enm.TaskType;
 
 public class Task extends AbstractTask {
-private String title;
+    private String title;
+
     public Task(String name, String description) {
 
         super(name, description);
