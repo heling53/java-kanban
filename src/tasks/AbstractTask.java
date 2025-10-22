@@ -1,6 +1,7 @@
 package tasks;
 
 import tasks.enm.Status;
+import tasks.enm.TaskType;
 
 import java.util.Objects;
 
@@ -11,6 +12,7 @@ public abstract class AbstractTask {
     protected String description;
     protected int id;
     protected Status type;
+    protected TaskType taskType;
 
     protected AbstractTask(String name, String description) {
         this.name = name;
@@ -46,11 +48,11 @@ public abstract class AbstractTask {
         this.description = description;
     }
 
-    public Status getType() {
+    public Status getStatus() {
         return type;
     }
 
-    public void setType(Status type) {
+    public void setStatus(Status type) {
         this.type = type;
     }
 
@@ -60,5 +62,9 @@ public abstract class AbstractTask {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public TaskType getTaskType() {
+        return taskType;
     }
 }
