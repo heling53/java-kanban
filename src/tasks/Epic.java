@@ -1,5 +1,7 @@
 package tasks;
 
+import tasks.enm.TaskType;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,6 +10,7 @@ public class Epic extends AbstractTask {
 
     public Epic(String name, String description) {
         super(name, description);
+        this.taskType = TaskType.EPIC;
 
     }
 
