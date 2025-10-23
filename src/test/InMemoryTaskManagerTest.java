@@ -82,7 +82,7 @@ class InMemoryTaskManagerTest {
     }
 
     @Test
-    void UpdateTask() {
+    void updateTask() {
         Task updatedTask = new Task("Updated Task", "Updated Description");
         updatedTask.setId(task.getId());
         updatedTask.setStatus(Status.DONE);
@@ -95,7 +95,7 @@ class InMemoryTaskManagerTest {
     }
 
     @Test
-    void GetAllEpics() {
+    void getAllEpics() {
         List<Epic> epics = taskManager.getAllEpics();
         assertNotNull(epics);
         assertEquals(1, epics.size());
@@ -103,7 +103,7 @@ class InMemoryTaskManagerTest {
     }
 
     @Test
-    void DeleteAllEpics() {
+    void deleteAllEpics() {
         taskManager.deleteAllEpics();
         List<Epic> epics = taskManager.getAllEpics();
         List<SubTask> subTasks = taskManager.getAllSubtasks();
@@ -113,7 +113,7 @@ class InMemoryTaskManagerTest {
     }
 
     @Test
-    void UpdateEpic() {
+    void updateEpic() {
         Epic updatedEpic = new Epic("Updated Epic", "Updated Description");
         updatedEpic.setId(epic.getId());
         List<Integer> idSubTasks = epic.getSubTasksId();
@@ -128,7 +128,7 @@ class InMemoryTaskManagerTest {
     }
 
     @Test
-    void DeleteAllSubtasks() {
+    void deleteAllSubtasks() {
         taskManager.deleteAllSubtasks();
         List<SubTask> subTasks = taskManager.getAllSubtasks();
         List<Integer> subTasksId = epic.getSubTasksId();
@@ -138,7 +138,7 @@ class InMemoryTaskManagerTest {
     }
 
     @Test
-    void UpdateSubtask() {
+    void updateSubtask() {
         SubTask updatedSubTask = new SubTask("Updated SubTask", "Updated Description", epic.getId());
         updatedSubTask.setStatus(Status.DONE);
         updatedSubTask.setId(subTask.getId());
@@ -152,7 +152,7 @@ class InMemoryTaskManagerTest {
     }
 
     @Test
-    void GetSubtasksByEpicId() {
+    void getSubtasksByEpicId() {
         List<SubTask> subTasks = taskManager.getSubtasksByEpicId(epic.getId());
         assertNotNull(subTasks);
         assertEquals(1, subTasks.size());
