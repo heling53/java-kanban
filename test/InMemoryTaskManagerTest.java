@@ -1,8 +1,5 @@
-package test;
-
 import manager.Managers;
 import manager.TaskManager;
-import manager.impl.InMemoryTaskManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import tasks.AbstractTask;
@@ -83,20 +80,20 @@ class InMemoryTaskManagerTest {
     }
 
     @Test
-    void UpdateTask() {
+    void updateTask() {
         Task updatedTask = new Task("Updated Task", "Updated Description");
         updatedTask.setId(task.getId());
-        updatedTask.setType(Status.DONE);
+        updatedTask.setStatus(Status.DONE);
         taskManager.updateTask(updatedTask);
 
         Task savedTask = taskManager.getTaskById(task.getId());
         assertEquals("Updated Task", savedTask.getName());
         assertEquals("Updated Description", savedTask.getDescription());
-        assertEquals(Status.DONE, savedTask.getType());
+        assertEquals(Status.DONE, savedTask.getStatus());
     }
 
     @Test
-    void GetAllEpics() {
+    void getAllEpics() {
         List<Epic> epics = taskManager.getAllEpics();
         assertNotNull(epics);
         assertEquals(1, epics.size());
@@ -104,7 +101,7 @@ class InMemoryTaskManagerTest {
     }
 
     @Test
-    void DeleteAllEpics() {
+    void deleteAllEpics() {
         taskManager.deleteAllEpics();
         List<Epic> epics = taskManager.getAllEpics();
         List<SubTask> subTasks = taskManager.getAllSubtasks();
@@ -114,7 +111,7 @@ class InMemoryTaskManagerTest {
     }
 
     @Test
-    void UpdateEpic() {
+    void updateEpic() {
         Epic updatedEpic = new Epic("Updated Epic", "Updated Description");
         updatedEpic.setId(epic.getId());
         List<Integer> idSubTasks = epic.getSubTasksId();
@@ -129,7 +126,7 @@ class InMemoryTaskManagerTest {
     }
 
     @Test
-    void DeleteAllSubtasks() {
+    void deleteAllSubtasks() {
         taskManager.deleteAllSubtasks();
         List<SubTask> subTasks = taskManager.getAllSubtasks();
         List<Integer> subTasksId = epic.getSubTasksId();
@@ -139,21 +136,21 @@ class InMemoryTaskManagerTest {
     }
 
     @Test
-    void UpdateSubtask() {
+    void updateSubtask() {
         SubTask updatedSubTask = new SubTask("Updated SubTask", "Updated Description", epic.getId());
-        updatedSubTask.setType(Status.DONE);
+        updatedSubTask.setStatus(Status.DONE);
         updatedSubTask.setId(subTask.getId());
         taskManager.updateSubtask(updatedSubTask);
 
         SubTask savedSubTask = taskManager.getSubtaskById(subTask.getId());
         assertEquals("Updated SubTask", savedSubTask.getName());
         assertEquals("Updated Description", savedSubTask.getDescription());
-        assertEquals(Status.DONE, savedSubTask.getType());
-        assertEquals(Status.DONE, epic.getType());
+        assertEquals(Status.DONE, savedSubTask.getStatus());
+        assertEquals(Status.DONE, epic.getStatus());
     }
 
     @Test
-    void GetSubtasksByEpicId() {
+    void getSubtasksByEpicId() {
         List<SubTask> subTasks = taskManager.getSubtasksByEpicId(epic.getId());
         assertNotNull(subTasks);
         assertEquals(1, subTasks.size());
@@ -166,14 +163,14 @@ class InMemoryTaskManagerTest {
         taskManager.createSubtask(secondSubTask);
 
         SubTask doneSubTask = new SubTask("Done SubTask", "Description", epic.getId());
-        doneSubTask.setType(Status.DONE);
+        doneSubTask.setStatus(Status.DONE);
         doneSubTask.setId(subTask.getId());
         taskManager.updateSubtask(doneSubTask);
-        assertEquals(Status.IN_PROGRESS, epic.getType());
+        assertEquals(Status.IN_PROGRESS, epic.getStatus());
 
-        secondSubTask.setType(Status.DONE);
+        secondSubTask.setStatus(Status.DONE);
         taskManager.updateSubtask(secondSubTask);
-        assertEquals(Status.DONE, epic.getType());
+        assertEquals(Status.DONE, epic.getStatus());
 
     }
 

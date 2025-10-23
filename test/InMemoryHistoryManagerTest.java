@@ -1,5 +1,3 @@
-package test;
-
 import manager.HistoryManager;
 import manager.Managers;
 import manager.TaskManager;
@@ -19,8 +17,6 @@ class InMemoryHistoryManagerTest {
     HistoryManager historyManager = Managers.getDefaultHistory();
     TaskManager taskManager = Managers.getDefault();
     private Task task1, task2, task3;
-
-
 
 
     @BeforeEach
