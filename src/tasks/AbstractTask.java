@@ -3,6 +3,8 @@ package tasks;
 import tasks.enm.Status;
 import tasks.enm.TaskType;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 
@@ -13,6 +15,8 @@ public abstract class AbstractTask {
     protected int id;
     protected Status type;
     protected TaskType taskType;
+    protected Duration duration;
+    protected LocalDateTime startTime;
 
     protected AbstractTask(String name, String description) {
         this.name = name;
@@ -66,5 +70,26 @@ public abstract class AbstractTask {
 
     public TaskType getTaskType() {
         return taskType;
+    }
+
+    public Duration getDuration() {
+        return duration;
+    }
+
+    public void setDuration(Duration duration) {
+        this.duration = duration;
+    }
+
+    public LocalDateTime getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(LocalDateTime startTime) {
+        this.startTime = startTime;
+    }
+
+    public LocalDateTime getEndTime() {
+        if (startTime == null || duration == null) return null;
+        return startTime.plus(duration);
     }
 }
