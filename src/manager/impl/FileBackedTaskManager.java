@@ -140,10 +140,11 @@ public class FileBackedTaskManager extends InMemoryTaskManager implements TaskMa
         task.setId(id);
         task.setStatus(status);
 
-        if(!durationField.isEmpty()){
+        if (!durationField.isEmpty()) {
             task.setDuration(Duration.ofMinutes(Long.parseLong(durationField)));
         }
-        if(!startTimeField.isEmpty()){
+
+        if (!startTimeField.isEmpty()) {
             task.setStartTime(LocalDateTime.parse(startTimeField));
         }
         return task;
