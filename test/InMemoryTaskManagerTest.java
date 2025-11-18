@@ -77,28 +77,20 @@ class InMemoryTaskManagerTest {
 
     @Test
     void deleteSubTaskAndEpic() {
-        Epic epic = new Epic("Epic", "Description");
-        taskManager.createEpic(epic);
-        SubTask subtask = new SubTask("Subtask", "Description", epic.getId());
-        taskManager.createSubtask(subtask);
-        int subtaskId = subtask.getId();
-        int epicId = epic.getId();
+        Epic newEpic = new Epic("New Epic", "Description");
+        taskManager.createEpic(newEpic);
+        SubTask newSubtask = new SubTask("New Subtask", "Description", newEpic.getId());
+        taskManager.createSubtask(newSubtask);
+        int subtaskId = newSubtask.getId();
+        int epicId = newEpic.getId();
+
 
         taskManager.deleteSubtaskById(subtaskId);
-        taskManager.deleteEpicById(epicId);
-
-        assertEquals(1, taskManager.getAllEpics().size());
-        assertEquals(1, taskManager.getAllSubtasks().size());
-
-        taskManager.deleteSubtaskById(subtaskId);
-
         assertTrue(taskManager.getAllSubtasks().isEmpty(), "Список подзадач должен быть пуст после удаления");
 
         taskManager.deleteEpicById(epicId);
-
         assertTrue(taskManager.getAllEpics().isEmpty(), "Список эпиков должен быть пуст после удаления");
     }
-
 
 
     @Test
