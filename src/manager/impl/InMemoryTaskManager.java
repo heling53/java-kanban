@@ -79,7 +79,7 @@ public class InMemoryTaskManager implements TaskManager {
             taskMap.remove(id);
             historyManager.remove(id);
             prioritizedTasks.remove(task);
-        }else {
+        } else {
             throw new RuntimeException("Задача с id=" + id + " не найдена");
         }
 
