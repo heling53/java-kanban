@@ -51,14 +51,19 @@ public class TasksHandler extends BaseHttpHandler implements HttpHandler {
     }
 
     private void handleGet(HttpExchange exchange, Map<String, String> params) throws IOException {
-        if (params.containsKey("id")) {
-            int id = Integer.parseInt(params.get("id"));
-            Task task = manager.getTaskById(id);
-            if (task == null) sendNotFound(exchange);
-            else sendOk(exchange, gson.toJson(task));
-        } else {
-            List<Task> all = manager.getAllTasks();
-            sendOk(exchange, gson.toJson(all));
+        try {
+            if (params.containsKey("id")) {
+                int id = Integer.parseInt(params.get("id"));
+                Task task = manager.getTaskById(id); // Теперь бросит исключение если не найден
+                sendOk(exchange, gson.toJson(task));
+            } else {
+                List<Task> all = manager.getAllTasks();
+                sendOk(exchange, gson.toJson(all));
+            }
+        } catch (NumberFormatException e) {
+            sendServerError(exchange, "Invalid ID format");
+        } catch (RuntimeException e) {
+            handleManagerException(exchange, e);
         }
     }
 
