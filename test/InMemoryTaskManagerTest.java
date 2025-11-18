@@ -64,15 +64,16 @@ class InMemoryTaskManagerTest {
 
     @Test
     void deleteTask() {
-        Task task = new Task("Test", "Description");
-        taskManager.createTask(task);
-        int taskId = task.getId();
+        Task newTask = new Task("New Task", "New Description");
+        taskManager.createTask(newTask);
+        int taskId = newTask.getId();
 
-        assertEquals(1, taskManager.getAllTasks().size());
+        assertEquals(2, taskManager.getAllTasks().size());
 
         taskManager.deleteTaskById(taskId);
 
-        assertTrue(taskManager.getAllTasks().isEmpty(), "Список задач должен быть пуст после удаления");
+        assertEquals(1, taskManager.getAllTasks().size());
+        assertFalse(taskManager.getAllTasks().contains(newTask));
     }
 
     @Test
@@ -84,12 +85,18 @@ class InMemoryTaskManagerTest {
         int subtaskId = newSubtask.getId();
         int epicId = newEpic.getId();
 
+        assertEquals(2, taskManager.getAllEpics().size());
+        assertEquals(2, taskManager.getAllSubtasks().size());
 
         taskManager.deleteSubtaskById(subtaskId);
-        assertTrue(taskManager.getAllSubtasks().isEmpty(), "Список подзадач должен быть пуст после удаления");
+
+        assertEquals(1, taskManager.getAllSubtasks().size());
+        assertFalse(taskManager.getAllSubtasks().contains(newSubtask));
 
         taskManager.deleteEpicById(epicId);
-        assertTrue(taskManager.getAllEpics().isEmpty(), "Список эпиков должен быть пуст после удаления");
+
+        assertEquals(1, taskManager.getAllEpics().size());
+        assertFalse(taskManager.getAllEpics().contains(newEpic));
     }
 
 
