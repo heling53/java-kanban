@@ -67,14 +67,16 @@ class HttpTaskManagerSubtasksTest extends tests.HttpTaskServerTest {
 
         SubTask subtask = new SubTask("Test Subtask", "Test Description", epic.getId());
         manager.createSubtask(subtask);
+        int subtaskId = subtask.getId();
 
         HttpClient client = HttpClient.newHttpClient();
-        URI url = URI.create("http://localhost:" + PORT + "/subtasks?id=" + subtask.getId());
+        URI url = URI.create("http://localhost:" + PORT + "/subtasks?id=" + subtaskId);
         HttpRequest request = HttpRequest.newBuilder().uri(url).DELETE().build();
 
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
         assertEquals(200, response.statusCode());
-        assertNull(manager.getSubtaskById(subtask.getId()));
+
+        assertTrue(manager.getAllSubtasks().isEmpty());
     }
 }

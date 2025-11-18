@@ -73,14 +73,16 @@ class HttpTaskManagerEpicsTest extends tests.HttpTaskServerTest {
     void testDeleteEpic() throws Exception {
         Epic epic = new Epic("Test Epic", "Test Description");
         manager.createEpic(epic);
+        int epicId = epic.getId();
 
         HttpClient client = HttpClient.newHttpClient();
-        URI url = URI.create("http://localhost:" + PORT + "/epics?id=" + epic.getId());
+        URI url = URI.create("http://localhost:" + PORT + "/epics?id=" + epicId);
         HttpRequest request = HttpRequest.newBuilder().uri(url).DELETE().build();
 
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
         assertEquals(200, response.statusCode());
-        assertNull(manager.getEpicById(epic.getId()));
+
+        assertTrue(manager.getAllEpics().isEmpty());
     }
 }

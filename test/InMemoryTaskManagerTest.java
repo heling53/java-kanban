@@ -64,21 +64,29 @@ class InMemoryTaskManagerTest {
 
     @Test
     void deleteTask() {
-        taskManager.deleteTaskById(task.getId());
-        final Task savedTask = taskManager.getTaskById(task.getId());
+        Task task = new Task("Test", "Description");
+        manager.createTask(task);
+        int taskId = task.getId();
 
-        assertNull(savedTask, "Задача не удалена.");
+        manager.deleteTaskById(taskId);
+
+        assertTrue(manager.getAllTasks().isEmpty());
     }
 
     @Test
     void deleteSubTaskAndEpic() {
-        taskManager.deleteSubtaskById(subTask.getId());
-        final SubTask savedSubTask = taskManager.getSubtaskById(subTask.getId());
-        assertNull(savedSubTask, "Задача не удалена.");
+        Epic epic = new Epic("Epic", "Description");
+        manager.createEpic(epic);
+        SubTask subtask = new SubTask("Subtask", "Description", epic.getId());
+        manager.createSubtask(subtask);
+        int subtaskId = subtask.getId();
+        int epicId = epic.getId();
 
-        taskManager.deleteEpicById(epic.getId());
-        final Epic savedEpic = taskManager.getEpicById(epic.getId());
-        assertNull(savedEpic, "Задача не удалена.");
+        manager.deleteSubtaskById(subtaskId);
+        manager.deleteEpicById(epicId);
+
+        assertTrue(manager.getAllSubtasks().isEmpty());
+        assertTrue(manager.getAllEpics().isEmpty());
     }
 
     @Test

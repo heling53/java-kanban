@@ -83,15 +83,17 @@ class HttpTaskManagerTasksTest extends HttpTaskServerTest {
     void testDeleteTask() throws Exception {
         Task task = new Task("Test Task", "Test Description");
         manager.createTask(task);
+        int taskId = task.getId();
 
         HttpClient client = HttpClient.newHttpClient();
-        URI url = URI.create("http://localhost:" + PORT + "/tasks?id=" + task.getId());
+        URI url = URI.create("http://localhost:" + PORT + "/tasks?id=" + taskId);
         HttpRequest request = HttpRequest.newBuilder().uri(url).DELETE().build();
 
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
         assertEquals(200, response.statusCode());
-        assertNull(manager.getTaskById(task.getId()));
+
+        assertTrue(manager.getAllTasks().isEmpty());
     }
 
     @Test
