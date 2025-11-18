@@ -43,10 +43,12 @@ public class BaseHttpHandler {
     }
 
     protected void handleManagerException(HttpExchange exchange, RuntimeException e) throws IOException {
-        String msg = e.getMessage() == null ? "" : e.getMessage();
-        if (msg.contains("пересек") || msg.contains("пересека")) {
+        String msg = e.getMessage() == null ? "" : e.getMessage().toLowerCase();
+
+        if (msg.contains("пересек") || msg.contains("пересека") || msg.contains("intersection")) {
             sendConflict(exchange, msg);
-        } else if (msg.contains("Нет такой") || msg.contains("не найден") || msg.contains("not found")) {
+        } else if (msg.contains("нет такой") || msg.contains("не найден") ||
+                msg.contains("not found") || msg.contains("не найдена")) {
             sendNotFound(exchange);
         } else {
             sendServerError(exchange, msg);
