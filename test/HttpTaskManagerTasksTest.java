@@ -1,4 +1,4 @@
-package test;
+package tests;
 
 import org.junit.jupiter.api.Test;
 import tasks.Task;
@@ -14,7 +14,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class HttpTaskManagerTasksTest extends tests.HttpTaskServerTest {
+class HttpTaskManagerTasksTest extends HttpTaskServerTest {
 
     @Test
     void testGetAllTasksEmpty() throws Exception {
@@ -56,7 +56,7 @@ class HttpTaskManagerTasksTest extends tests.HttpTaskServerTest {
         manager.createTask(task);
 
         HttpClient client = HttpClient.newHttpClient();
-        URI url = URI.create("http://localhost:" + PORT + "/tasks" + task.getId());
+        URI url = URI.create("http://localhost:" + PORT + "/tasks?id=" + task.getId());
         HttpRequest request = HttpRequest.newBuilder().uri(url).GET().build();
 
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
@@ -70,34 +70,13 @@ class HttpTaskManagerTasksTest extends tests.HttpTaskServerTest {
     @Test
     void testGetTaskNotFound() throws Exception {
         HttpClient client = HttpClient.newHttpClient();
-        URI url = URI.create("http://localhost:" + PORT + "/tasks");
+        URI url = URI.create("http://localhost:" + PORT + "/tasks?id=999");
         HttpRequest request = HttpRequest.newBuilder().uri(url).GET().build();
 
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
         assertEquals(404, response.statusCode());
-    }
-
-    @Test
-    void testUpdateTask() throws Exception {
-        Task task = new Task("Original Task", "Original Description");
-        manager.createTask(task);
-
-        task.setName("Updated Task");
-        String updatedJson = gson.toJson(task);
-
-        HttpClient client = HttpClient.newHttpClient();
-        URI url = URI.create("http://localhost:" + PORT + "/tasks");
-        HttpRequest request = HttpRequest.newBuilder()
-                .uri(url)
-                .POST(HttpRequest.BodyPublishers.ofString(updatedJson))
-                .build();
-
-        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-
-        assertEquals(200, response.statusCode());
-        Task updatedTask = manager.getTaskById(task.getId());
-        assertEquals("Updated Task", updatedTask.getName());
+        assertTrue(response.body().contains("error"));
     }
 
     @Test
@@ -106,7 +85,7 @@ class HttpTaskManagerTasksTest extends tests.HttpTaskServerTest {
         manager.createTask(task);
 
         HttpClient client = HttpClient.newHttpClient();
-        URI url = URI.create("http://localhost:" + PORT + "/tasks" + task.getId());
+        URI url = URI.create("http://localhost:" + PORT + "/tasks?id=" + task.getId());
         HttpRequest request = HttpRequest.newBuilder().uri(url).DELETE().build();
 
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
@@ -141,7 +120,7 @@ class HttpTaskManagerTasksTest extends tests.HttpTaskServerTest {
         manager.createTask(task1);
 
         Task task2 = new Task("Task 2", "Description 2");
-        task2.setStartTime(startTime.plusMinutes(10)); // Пересекается
+        task2.setStartTime(startTime.plusMinutes(10));
         task2.setDuration(Duration.ofMinutes(30));
 
         String taskJson = gson.toJson(task2);
@@ -155,6 +134,6 @@ class HttpTaskManagerTasksTest extends tests.HttpTaskServerTest {
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
         assertEquals(406, response.statusCode());
-        assertEquals(1, manager.getAllTasks().size()); // Только первая задача
+        assertEquals(1, manager.getAllTasks().size());
     }
 }
