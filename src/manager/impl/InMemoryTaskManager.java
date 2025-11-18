@@ -41,8 +41,9 @@ public class InMemoryTaskManager implements TaskManager {
         Task task = taskMap.get(id);
         if (task != null) {
             addToHistory(task);
+            return task;
         }
-        return task;
+        throw new RuntimeException("Задача с id=" + id + " не найдена");
     }
 
     @Override
@@ -99,8 +100,9 @@ public class InMemoryTaskManager implements TaskManager {
         Epic epic = epicsMap.get(id);
         if (epic != null) {
             addToHistory(epic);
+            return epic;
         }
-        return epic;
+        throw new RuntimeException("Эпик с id=" + id + " не найден");
     }
 
     @Override
@@ -155,8 +157,9 @@ public class InMemoryTaskManager implements TaskManager {
         SubTask subTask = subTaskMap.get(id);
         if (subTask != null) {
             addToHistory(subTask);
+            return subTask;
         }
-        return subTask;
+        throw new RuntimeException("Подзадача с id=" + id + " не найдена");
     }
 
     @Override
