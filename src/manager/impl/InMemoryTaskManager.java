@@ -41,8 +41,9 @@ public class InMemoryTaskManager implements TaskManager {
         Task task = taskMap.get(id);
         if (task != null) {
             addToHistory(task);
+            return task;
         }
-        return task;
+        throw new RuntimeException("Задача с id=" + id + " не найдена");
     }
 
     @Override
@@ -74,9 +75,12 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public void deleteTaskById(int id) {
         if (taskMap.containsKey(id)) {
+            Task task = taskMap.get(id);
             taskMap.remove(id);
             historyManager.remove(id);
-            prioritizedTasks.remove(taskMap.get(id));
+            prioritizedTasks.remove(task);
+        } else {
+            throw new RuntimeException("Задача с id=" + id + " не найдена");
         }
 
     }
@@ -99,8 +103,9 @@ public class InMemoryTaskManager implements TaskManager {
         Epic epic = epicsMap.get(id);
         if (epic != null) {
             addToHistory(epic);
+            return epic;
         }
-        return epic;
+        throw new RuntimeException("Эпик с id=" + id + " не найден");
     }
 
     @Override
@@ -130,7 +135,7 @@ public class InMemoryTaskManager implements TaskManager {
                 historyManager.remove(subTaskIdForDelete);
             }
         } else {
-            throw new RuntimeException("Нет такой задачи!");
+            throw new RuntimeException("Эпик с id=" + epicIdForDelete + " не найден");
         }
     }
 
@@ -155,8 +160,9 @@ public class InMemoryTaskManager implements TaskManager {
         SubTask subTask = subTaskMap.get(id);
         if (subTask != null) {
             addToHistory(subTask);
+            return subTask;
         }
-        return subTask;
+        throw new RuntimeException("Подзадача с id=" + id + " не найдена");
     }
 
     @Override
@@ -187,15 +193,20 @@ public class InMemoryTaskManager implements TaskManager {
     public void deleteSubtaskById(int id) {
 
         if (subTaskMap.containsKey(id)) {
-            int epicId = subTaskMap.get(id).getEpicId();
-            Epic epic = getEpicById(epicId);
-            epic.removeSubTasksID(id);
+            SubTask subtask = subTaskMap.get(id);
+            int epicId = subtask.getEpicId();
+            Epic epic = epicsMap.get(epicId);
+            if (epic != null) {
+                epic.removeSubTasksID(id);
+                updateStatusEpic(epic);
+                updateEpicTime(epic);
+            }
+
             subTaskMap.remove(id);
             historyManager.remove(id);
-            updateStatusEpic(epic);
-            updateEpicTime(epic);
+            prioritizedTasks.remove(subtask);
         } else {
-            throw new RuntimeException("Нет такой задачи!");
+            throw new RuntimeException("Подзадача с id=" + id + " не найдена");
         }
     }
 
