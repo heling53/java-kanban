@@ -7,6 +7,7 @@ import manager.TaskManager;
 import server.BaseHttpHandler;
 import server.QueryParser;
 import tasks.Task;
+import tasks.enm.HttpMethod;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -26,22 +27,22 @@ public class TasksHandler extends BaseHttpHandler implements HttpHandler {
     @Override
     public void handle(HttpExchange exchange) throws IOException {
         try {
-            String method = exchange.getRequestMethod();
+            HttpMethod httpMethod = HttpMethod.valueOf(exchange.getRequestMethod());
             String query = exchange.getRequestURI().getQuery();
             Map<String, String> params = QueryParser.parse(query);
 
-            switch (method) {
-                case "GET":
+            switch (httpMethod) {
+                case GET:
                     handleGet(exchange, params);
                     break;
-                case "POST":
+                case POST:
                     handlePost(exchange);
                     break;
-                case "DELETE":
+                case DELETE:
                     handleDelete(exchange, params);
                     break;
                 default:
-                    sendServerError(exchange, "Unsupported method: " + method);
+                    sendServerError(exchange, "Unsupported method: " + httpMethod);
             }
         } catch (RuntimeException e) {
             handleManagerException(exchange, e);

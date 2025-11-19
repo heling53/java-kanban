@@ -7,6 +7,7 @@ import manager.TaskManager;
 import server.BaseHttpHandler;
 import server.QueryParser;
 import tasks.SubTask;
+import tasks.enm.HttpMethod;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -26,12 +27,12 @@ public class SubtasksHandler extends BaseHttpHandler implements HttpHandler {
     @Override
     public void handle(HttpExchange exchange) throws IOException {
         try {
-            String method = exchange.getRequestMethod();
+            HttpMethod httpMethod = HttpMethod.valueOf(exchange.getRequestMethod());
             String path = exchange.getRequestURI().getPath();
             String query = exchange.getRequestURI().getQuery();
             Map<String, String> params = QueryParser.parse(query);
 
-            if ("GET".equals(method) && path.endsWith("/epic")) {
+            if (httpMethod == HttpMethod.GET && path.endsWith("/epic")) {
                 if (params.containsKey("id")) {
                     int epicId = Integer.parseInt(params.get("id"));
                     try {
@@ -46,8 +47,8 @@ public class SubtasksHandler extends BaseHttpHandler implements HttpHandler {
                 return;
             }
 
-            switch (method) {
-                case "GET":
+            switch (httpMethod) {
+                case GET:
                     if (params.containsKey("id")) {
                         int id = Integer.parseInt(params.get("id"));
                         SubTask sub = manager.getSubtaskById(id);
@@ -58,7 +59,7 @@ public class SubtasksHandler extends BaseHttpHandler implements HttpHandler {
                         sendOk(exchange, gson.toJson(all));
                     }
                     break;
-                case "POST":
+                case POST:
                     InputStream is = exchange.getRequestBody();
                     String body = new String(is.readAllBytes(), StandardCharsets.UTF_8).trim();
                     if (body.isEmpty()) {
@@ -82,7 +83,7 @@ public class SubtasksHandler extends BaseHttpHandler implements HttpHandler {
                         }
                     }
                     break;
-                case "DELETE":
+                case DELETE:
                     if (params.containsKey("id")) {
                         int id = Integer.parseInt(params.get("id"));
                         try {
