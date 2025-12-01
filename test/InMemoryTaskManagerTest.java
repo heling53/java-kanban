@@ -64,22 +64,41 @@ class InMemoryTaskManagerTest {
 
     @Test
     void deleteTask() {
-        taskManager.deleteTaskById(task.getId());
-        final Task savedTask = taskManager.getTaskById(task.getId());
+        Task newTask = new Task("New Task", "New Description");
+        taskManager.createTask(newTask);
+        int taskId = newTask.getId();
 
-        assertNull(savedTask, "Задача не удалена.");
+        assertEquals(2, taskManager.getAllTasks().size());
+
+        taskManager.deleteTaskById(taskId);
+
+        assertEquals(1, taskManager.getAllTasks().size());
+        assertFalse(taskManager.getAllTasks().contains(newTask));
     }
 
     @Test
     void deleteSubTaskAndEpic() {
-        taskManager.deleteSubtaskById(subTask.getId());
-        final SubTask savedSubTask = taskManager.getSubtaskById(subTask.getId());
-        assertNull(savedSubTask, "Задача не удалена.");
+        Epic newEpic = new Epic("New Epic", "Description");
+        taskManager.createEpic(newEpic);
+        SubTask newSubtask = new SubTask("New Subtask", "Description", newEpic.getId());
+        taskManager.createSubtask(newSubtask);
+        int subtaskId = newSubtask.getId();
+        int epicId = newEpic.getId();
 
-        taskManager.deleteEpicById(epic.getId());
-        final Epic savedEpic = taskManager.getEpicById(epic.getId());
-        assertNull(savedEpic, "Задача не удалена.");
+        assertEquals(2, taskManager.getAllEpics().size());
+        assertEquals(2, taskManager.getAllSubtasks().size());
+
+        taskManager.deleteSubtaskById(subtaskId);
+
+        assertEquals(1, taskManager.getAllSubtasks().size());
+        assertFalse(taskManager.getAllSubtasks().contains(newSubtask));
+
+        taskManager.deleteEpicById(epicId);
+
+        assertEquals(1, taskManager.getAllEpics().size());
+        assertFalse(taskManager.getAllEpics().contains(newEpic));
     }
+
 
     @Test
     void updateTask() {
